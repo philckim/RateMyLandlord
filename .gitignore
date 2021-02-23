@@ -11,6 +11,7 @@ web-build/
 default.json
 node_modules
 **/node_modules
-backend/node_modules
+backend/node_modules/
+backend/config/default.json
 # macOS
 .DS_Store
