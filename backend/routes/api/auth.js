@@ -75,3 +75,5 @@ async (req, res) => {
         res.status(500).send('Servr Error (auth.js)');
     }
 });
+
+module.exports = router;
