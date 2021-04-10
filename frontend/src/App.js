@@ -1,5 +1,7 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState, useCallback } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import axios from "axios";
+import { PlaidLink, usePlaidLink } from 'react-plaid-link';
 
 // COMPONENTS
 import Landing from './components/layout/Landing';
@@ -8,6 +10,7 @@ import Register from './components/userAuth/Register';
 import Alert from './components/layout/Alert';
 import Dashboard from './components/dashboard/Dashboard';
 import PrivateRoute from './components/routing/PrivateRoute';
+import Navbar from './components/layout/Navbar';
 
 // REDUX
 import { Provider } from 'react-redux';
@@ -22,6 +25,7 @@ if (localStorage.token) {
 }
 
 const App = () => {
+
   useEffect(() => {
     store.dispatch(loadUser());
   }, []);

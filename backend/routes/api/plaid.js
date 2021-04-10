@@ -13,11 +13,16 @@ const client = new plaid.Client({
     env: plaid.environments.sandbox
 });
 
+const PUBLIC_TOKEN = null;
+const ACCESS_TOKEN = null;
+const ITEM_ID = null;
+
 // @route   GET api/plaid
 // @desc    Create a temp Link token to exchange with plaid api
 // @access  Public
-router.get('/create_link_token', async (req, res) => {
+router.get('/create-link-token', async (req, res) => {
     try {
+      console.log(`backend create-link-token by ${uid}`);
       const { link_token: linkToken } = await client.createLinkToken({
         user: {
           client_user_id: "unique id",
@@ -29,6 +34,7 @@ router.get('/create_link_token', async (req, res) => {
       });
 
       res.json({ linkToken });
+      console.log('create-link-token success! token: ', linkToken)
 
     } catch (err) {
         return res.send({ err: err.message })
@@ -40,6 +46,7 @@ router.get('/create_link_token', async (req, res) => {
 // @access  Public
 router.post('/token-exchange', async (req, res) => {
     try {
+      console.log('backend token exchange...')
       const { publicToken } = req.body;
       const { access_token: accessToken } = await client.exchangePublicToken(publicToken);
 
@@ -52,9 +59,24 @@ router.post('/token-exchange', async (req, res) => {
       );
 
       res.json({ balanceResponse, transactionResponse });
+      console.log('token exchange success!')
     } catch (err) {
       return res.send({ err: err.message })
     }
 });
+
+// @route GET api/plaid/accounts
+// @desc Get all accounts linked with plaid for a specific user
+// @access Private
+router.get('/accounts', auth, (req, res) => {
+    Account.find({ userId: req.user.id })
+      .then(accounts => res.json(accounts))
+      .catch(err => console.log(err));
+  }
+);
+
+// @route POST api/plaid/accounts
+// @desc Get all accounts linked with plaid for a specific user
+// @access Private
 
 module.exports = router;
